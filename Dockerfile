@@ -13,7 +13,7 @@ FROM ubuntu:16.04
 #GPU_FP16	    Intel Integrated Graphics
 #MYRIAD_FP16	Intel MovidiusTM USB sticks (aka Intel® Neural Compute Stick 2 (Intel® NCS 2) or the original Intel® Movidius™ NCS)
 #VAD-M_FP16	    Intel Vision Accelerator Design based on MovidiusTM MyriadX VPUs
-ARG DEVICE=VAD-M_FP16
+ARG DEVICE=MYRIAD_FP16
 ARG ONNXRUNTIME_REPO=https://github.com/microsoft/onnxruntime
 ARG ONNXRUNTIME_BRANCH=master
 ARG DOWNLOAD_LINK=http://registrationcenter-download.intel.com/akdlm/irc_nas/16612/l_openvino_toolkit_p_2020.2.120.tgz
@@ -51,6 +51,7 @@ RUN apt update && \
     tar -xzf l_openvino_toolkit*.tgz && \
     rm -rf l_openvino_toolkit*.tgz && \
     cd l_openvino_toolkit* && \
+    sed -i "s/$pattern/$replacement/" silent.cfg && \
     sed -i 's/decline/accept/g' silent.cfg && \
     ./install.sh -s silent.cfg && \
     cd - && \
@@ -61,8 +62,6 @@ RUN apt update && \
     cd ${MY_ROOT} && \
     cd onnxruntime && ./build.sh --config Release --update --build --parallel --use_openvino $DEVICE --build_wheel --use_full_protobuf && \
     pip install build/Linux/Release/dist/*-linux_x86_64.whl && rm -rf /code/onnxruntime /code/cmake-3.14.3-Linux-x86_64
-
-#    sed -i "s/$pattern/$replacement/" silent.cfg && \
 
 # from this point on, this is used to add and serve the CustomVision.ai onnx files
 ARG CustomVisionModelLink=https://kevinsayazstorage.blob.core.windows.net/public/d64f43ac870a437497ce47721d95301d.ONNX.zip
