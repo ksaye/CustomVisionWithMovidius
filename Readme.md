@@ -1,1 +1,1 @@
-
+Source files for: https://techcommunity.microsoft.com/t5/azure-ai/customvision-accelerating-a-model-with-onnx-runtime-on-a-cpu-gpu/ba-p/1394275 and https://kevinsaye.wordpress.com/2020/05/13/customvision-accelerating-an-onnx-model-on-a-movidius-network-compute-stick/
